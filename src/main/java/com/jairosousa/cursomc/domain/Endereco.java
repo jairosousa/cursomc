@@ -34,7 +34,7 @@ public class Endereco implements Serializable{
 	@JoinColumn(name="cliente_id")
 	private Cliente cliente;
 
-	private Endereco() {
+	public Endereco() {
 
 	}
 
