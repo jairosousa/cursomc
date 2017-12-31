@@ -18,6 +18,6 @@ public class CategoriaResource {
 
 	@GetMapping(value="/{id}")
 	public ResponseEntity<?> find(@PathVariable Integer id) {
-		return ResponseEntity.ok(service.buscar(id));
+		return ResponseEntity.ok().body(service.buscar(id));
 	}
 }
