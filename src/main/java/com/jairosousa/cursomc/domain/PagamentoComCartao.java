@@ -19,11 +19,11 @@ public class PagamentoComCartao extends Pagamento {
 		this.numeroDeParcelas = numeroDeParcelas;
 	}
 
-	public Integer getBuneroDeParcelas() {
+	public Integer getNumeroDeParcelas() {
 		return numeroDeParcelas;
 	}
 
-	public void setBuneroDeParcelas(Integer numeroDeParcelas) {
+	public void setNumeroDeParcelas(Integer numeroDeParcelas) {
 		this.numeroDeParcelas = numeroDeParcelas;
 	}
 	
