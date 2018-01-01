@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jairosousa.cursomc.domain.Cliente;
 import com.jairosousa.cursomc.services.ClienteService;
 
 @RestController
@@ -17,7 +18,7 @@ public class ClienteResource {
 	private ClienteService service;
 
 	@GetMapping(value="/{id}")
-	public ResponseEntity<?> find(@PathVariable Integer id) {
+	public ResponseEntity<Cliente> find(@PathVariable Integer id) {
 		return ResponseEntity.ok().body(service.find(id));
 	}
 }
