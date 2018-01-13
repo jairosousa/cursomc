@@ -22,28 +22,29 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.jairosousa.cursomc.domain.Cliente;
 import com.jairosousa.cursomc.dto.ClienteDTO;
+import com.jairosousa.cursomc.dto.ClienteNewDTO;
 import com.jairosousa.cursomc.services.ClienteService;
 
 @RestController
-@RequestMapping(value="/clientes")
+@RequestMapping(value = "/clientes")
 public class ClienteResource {
-	
+
 	@Autowired
 	private ClienteService service;
 
-	@GetMapping(value="/{id}")
+	@GetMapping(value = "/{id}")
 	public ResponseEntity<Cliente> find(@PathVariable Integer id) {
 		return ResponseEntity.ok().body(service.find(id));
 	}
-	
-//	@PostMapping
-//	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteDTO objDTO) {
-//		Cliente obj = service.fromDTO(objDTO);
-//		obj = service.insert(obj);
-//		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-//
-//		return ResponseEntity.created(uri).build();
-//	}
+
+	@PostMapping
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDTO) {
+		Cliente obj = service.fromDTO(objDTO);
+		obj = service.insert(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+
+		return ResponseEntity.created(uri).build();
+	}
 
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO objDTO, @PathVariable Integer id) {
