@@ -10,7 +10,6 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jairosousa.cursomc.domain.enums.TipoCliente;
-import org.hibernate.annotations.Cascade;
 
 @Entity
 public class Cliente implements Serializable {
@@ -20,6 +19,8 @@ public class Cliente implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
+	
+	@Column(unique = true)
 	private String email;
 	private String cpfOuCnpj;
 	private Integer tipo;
