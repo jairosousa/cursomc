@@ -31,7 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	//Endpoints Somente de leitura so permitir recurar dados
 	private static final String[] PUBLIC_MATHERS_GET = { 
 			"/produtos/**", 
-			"/categorias/**" 
+			"/categorias/**", 
+			"/clientes/**" 
 			};
 
 	@Override
