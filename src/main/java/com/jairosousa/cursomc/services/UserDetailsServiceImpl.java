@@ -14,12 +14,12 @@ import com.jairosousa.cursomc.security.UserSS;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private ClienteRepository clieneteRepository;
+	private ClienteRepository clienteRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-		Cliente cli = clieneteRepository.findByEmail(email);
+		Cliente cli = clienteRepository.findByEmail(email);
 
 		if (cli == null) {
 			throw new UsernameNotFoundException(email);

@@ -4,8 +4,6 @@ import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,8 +28,11 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	}
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+	protected void doFilterInternal(HttpServletRequest request,
+			HttpServletResponse response, 
+			FilterChain chain)
 			throws IOException, ServletException {
+		
 		String header = request.getHeader("Authorization");
 		
 		if (header != null && header.startsWith("Bearer ")) {
@@ -47,7 +48,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 		if (jwtUtil.tokenValido(token)) {
 			String username = jwtUtil.getUsername(token);
 			UserDetails user = userDetailsService.loadUserByUsername(username);
-			return new UsernamePasswordAuthenticationToken(username, null, user.getAuthorities());
+			return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 		}
 		return null;
 	}

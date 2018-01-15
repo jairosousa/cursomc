@@ -13,18 +13,21 @@ import org.springframework.stereotype.Service;
 import com.jairosousa.cursomc.domain.Cidade;
 import com.jairosousa.cursomc.domain.Cliente;
 import com.jairosousa.cursomc.domain.Endereco;
+import com.jairosousa.cursomc.domain.enums.Perfil;
 import com.jairosousa.cursomc.domain.enums.TipoCliente;
 import com.jairosousa.cursomc.dto.ClienteDTO;
 import com.jairosousa.cursomc.dto.ClienteNewDTO;
 import com.jairosousa.cursomc.repository.CidadeRepository;
 import com.jairosousa.cursomc.repository.ClienteRepository;
 import com.jairosousa.cursomc.repository.EnderecoRepository;
+import com.jairosousa.cursomc.security.UserSS;
+import com.jairosousa.cursomc.services.exceptios.AuthorizationException;
 import com.jairosousa.cursomc.services.exceptios.DataIntegrityException;
 import com.jairosousa.cursomc.services.exceptios.ObjectNotFoundException;
 
 @Service
 public class ClienteService {
-	
+
 	@Autowired
 	private BCryptPasswordEncoder bcryipt;
 
@@ -33,11 +36,18 @@ public class ClienteService {
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
-	
+
 	@Autowired
 	private EnderecoRepository enderecoRepository;
 
 	public Cliente find(Integer id) {
+
+		UserSS user = UserService.authenticated();
+		
+		if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso Negado");
+		}
+
 		Cliente obj = clienteRepository.findOne(id);
 		if (obj == null) {
 			throw new ObjectNotFoundException(
@@ -86,22 +96,22 @@ public class ClienteService {
 				TipoCliente.toEnum(objDTO.getTipo()), bcryipt.encode(objDTO.getSenha()));
 
 		Cidade cid = cidadeRepository.findOne(objDTO.getCidadeId());
-		
+
 		Endereco end = new Endereco(null, objDTO.getLogradouro(), objDTO.getNumero(), objDTO.getComplemento(),
 				objDTO.getBairro(), objDTO.getCep(), cli, cid);
-		
+
 		cli.getEnderecos().add(end);
-		
+
 		cli.getTelefones().add(objDTO.getTelefone1());
 
 		if (objDTO.getTelefone2() != null) {
 			cli.getTelefones().add(objDTO.getTelefone2());
 		}
-		
+
 		if (objDTO.getTelefone3() != null) {
 			cli.getTelefones().add(objDTO.getTelefone3());
 		}
-		
+
 		return cli;
 	}
 
