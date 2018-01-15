@@ -9,7 +9,6 @@ public class UserService {
 	public static UserSS authenticated() {
 
 		try {
-			System.out.println("UserSS"+SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 			return (UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		} 
 		catch (Exception e) {
