@@ -50,7 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	// Endpoints poderão cadastrar EX: o Cliente podera se cadastrar no sistema sem estar logado
 	private static final String[] PUBLIC_MATHERS_POST = { 
-			"/clientes/**" 
+			"/clientes/**" ,
+			"/auth/forgot/**"
 	};
 
 	@Override
