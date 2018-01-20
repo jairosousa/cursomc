@@ -9,8 +9,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.jairosousa.cursomc.services.exceptios.AuthorizationException;
 import com.jairosousa.cursomc.services.exceptios.DataIntegrityException;
+import com.jairosousa.cursomc.services.exceptios.FileException;
 import com.jairosousa.cursomc.services.exceptios.ObjectNotFoundException;
 
 @ControllerAdvice
@@ -27,23 +30,43 @@ public class ResourceExceptionHandler {
 		StandarError err = new StandarError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
 	}
-	
+
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<StandarError> validation(MethodArgumentNotValidException e, HttpServletRequest request) {
-		
-		ValidationError err = new ValidationError(HttpStatus.BAD_REQUEST.value(), "Erro de Validação", System.currentTimeMillis());
-		
-		for (FieldError x: e.getBindingResult().getFieldErrors()) {
+
+		ValidationError err = new ValidationError(HttpStatus.BAD_REQUEST.value(), "Erro de Validação",
+				System.currentTimeMillis());
+
+		for (FieldError x : e.getBindingResult().getFieldErrors()) {
 			err.addError(x.getField(), x.getDefaultMessage());
 		}
-		
+
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
 	}
-	
+
 	@ExceptionHandler(AuthorizationException.class)
 	public ResponseEntity<StandarError> authorization(AuthorizationException e, HttpServletRequest request) {
 		StandarError err = new StandarError(HttpStatus.FORBIDDEN.value(), e.getMessage(), System.currentTimeMillis());
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
+	}
+
+	@ExceptionHandler(FileException.class)
+	public ResponseEntity<StandarError> file(FileException e, HttpServletRequest request) {
+		StandarError err = new StandarError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+	}
+
+	@ExceptionHandler(AmazonServiceException.class)
+	public ResponseEntity<StandarError> amazonService(AmazonServiceException e, HttpServletRequest request) {
+		HttpStatus code = HttpStatus.valueOf(e.getErrorCode());
+		StandarError err = new StandarError(code.value(), e.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(code).body(err);
+	}
+
+	@ExceptionHandler(AmazonS3Exception.class)
+	public ResponseEntity<StandarError> amazonS3(AmazonS3Exception e, HttpServletRequest request) {
+		StandarError err = new StandarError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
 	}
 
 }
