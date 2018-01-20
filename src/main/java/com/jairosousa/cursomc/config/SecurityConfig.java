@@ -45,7 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	// Endpoints Somente de leitura so permitir recurar dados
 	private static final String[] PUBLIC_MATHERS_GET = { 
 			"/produtos/**", 
-			"/categorias/**", 
+			"/categorias/**",
+			"/estados/**",
+			"/cidades/**",
 	};
 	
 	// Endpoints poderão cadastrar EX: o Cliente podera se cadastrar no sistema sem estar logado
