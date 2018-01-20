@@ -49,10 +49,12 @@ public class Cliente implements Serializable {
 	@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
 	private List<Pedido> pedidos = new ArrayList<>();
-	
-	@ElementCollection(fetch=FetchType.EAGER)
+
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "PERFIS")
-	private Set<Integer> perfis= new HashSet<>();
+	private Set<Integer> perfis = new HashSet<>();
+
+	private String imageURL;
 
 	public Cliente() {
 		addPerfil(Perfil.CLIENTE);
@@ -147,6 +149,14 @@ public class Cliente implements Serializable {
 
 	public void addPerfil(Perfil perfil) {
 		this.perfis.add(perfil.getCod());
+	}
+
+	public String getImageURL() {
+		return imageURL;
+	}
+
+	public void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
 	}
 
 	@Override

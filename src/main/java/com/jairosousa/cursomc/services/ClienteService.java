@@ -41,14 +41,14 @@ public class ClienteService {
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
-	
+
 	@Autowired
 	private S3Service s3service;
 
 	public Cliente find(Integer id) {
 
 		UserSS user = UserService.authenticated();
-		
+
 		if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
 			throw new AuthorizationException("Acesso Negado");
 		}
@@ -126,6 +126,18 @@ public class ClienteService {
 	}
 
 	public URI uplodProfilePicture(MultipartFile multipartFile) {
-		return s3service.uploadFile(multipartFile);
+		UserSS user = UserService.authenticated();
+
+		if (user == null) {
+			throw new AuthorizationException("Acesso Negado");
+		}
+
+		URI uri = s3service.uploadFile(multipartFile);
+
+		Cliente cli = clienteRepository.findOne(user.getId());
+		cli.setImageURL(uri.toString());
+		cli = clienteRepository.save(cli);
+
+		return uri;
 	}
 }
